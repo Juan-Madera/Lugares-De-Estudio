@@ -2,8 +2,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 
-# Ruta del archivo Excel
-archivo_excel = r"C:\Users\jsmad\Downloads\Lugares de estudio\DataspruebacondatosDe.xlsx"
+import requests
+import os
+
+
+# URL del archivo en GitHub (RAW)
+file_url = "https://raw.githubusercontent.com/Juan-Madera/Lugares-De-Estudio/main/DataspruebacondatosDe.xlsx"
+
+# Descargar el archivo
+response = requests.get(file_url)
+file_path = os.path.join(os.getcwd(), "DataspruebacondatosDe.xlsx")
+
+
+with open(file_path, "wb") as file:
+    file.write(response.content)
+
+# Cargar el archivo con pandas
+df = pd.read_excel(file_path)
+print(df.head())  # Verificar que se cargó correctamente
 
 # CSS para centrar contenido
 st.markdown(
@@ -39,7 +55,7 @@ st.markdown(
 )
 
 try:
-    df = pd.read_excel(archivo_excel)
+    df = pd.read_excel(file_path)
     df["Lugar"] = df["Lugar"].fillna('').astype(str).str.strip().str.capitalize()
     
     frecuencia_lugares = df["Lugar"].value_counts()
@@ -144,7 +160,7 @@ try:
     st.pyplot(fig5)
 
 except FileNotFoundError:
-    st.error(f"❌ Error: No se encontró el archivo en la ruta: {archivo_excel}")
+    st.error(f"❌ Error: No se encontró el archivo en la ruta: {file_path}")
 
 except Exception as e:
     st.error(f"⚠️ Error inesperado: {str(e)}")
