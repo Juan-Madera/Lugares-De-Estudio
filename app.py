@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # Ruta del archivo Excel
-archivo_excel = r"C:\Users\luisb\Downloads\Carpeta python\DataspruebacondatosDe.xlsx"
+archivo_excel = r"C:\Users\jsmad\Downloads\Lugares de estudio\DataspruebacondatosDe.xlsx"
 
 # CSS para centrar contenido
 st.markdown(
@@ -99,46 +99,49 @@ try:
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
     st.pyplot(fig)
 
-    # Gráfico de caja
-    fig2, ax2 = plt.subplots(figsize=(8, 5))
-    ax2.boxplot(df["Lugar_numeric"], vert=False, patch_artist=True, boxprops=dict(facecolor="lightblue"))
-    ax2.axvline(limite_inferior, color="red", linestyle="dashed", label=f"Límite Inferior: {limite_inferior:.2f}")
-    ax2.axvline(limite_superior, color="red", linestyle="dashed", label=f"Límite Superior: {limite_superior:.2f}")
-    ax2.legend()
-    ax2.set_title("Valores Atípicos")
-    ax2.set_xlabel("Frecuencia de Lugares")
+    # Gráfico de pastel
+    fig2, ax2 = plt.subplots(figsize=(7, 7))
+    ax2.pie(frecuencia_lugares, labels=frecuencia_lugares.index, autopct='%1.1f%%', colors=plt.cm.Paired.colors)
+    ax2.set_title("Distribución de Lugares (Gráfico de Pastel)")
     st.pyplot(fig2)
+
+    # Gráfico de caja
+    fig3, ax3 = plt.subplots(figsize=(8, 5))
+    ax3.boxplot(df["Lugar_numeric"], vert=False, patch_artist=True, boxprops=dict(facecolor="lightblue"))
+    ax3.axvline(limite_inferior, color="red", linestyle="dashed", label=f"Límite Inferior: {limite_inferior:.2f}")
+    ax3.axvline(limite_superior, color="red", linestyle="dashed", label=f"Límite Superior: {limite_superior:.2f}")
+    ax3.legend()
+    ax3.set_title("Valores Atípicos")
+    ax3.set_xlabel("Frecuencia de Lugares")
+    st.pyplot(fig3)
 
     # Gráfico de Dispersión
     st.markdown('<p class="subtitle centered">📌 Diagrama de Dispersión</p>', unsafe_allow_html=True)
-    fig3, ax3 = plt.subplots(figsize=(9, 6))
-    ax3.scatter(df.index, df["Lugar_numeric"], color='purple', alpha=0.6, edgecolors='black')
-    ax3.set_title("Diagrama de Dispersión de Frecuencia de Lugares")
-    ax3.set_xlabel("Índice")
-    ax3.set_ylabel("Frecuencia de Lugares")
-    ax3.grid(True, linestyle="--", alpha=0.5)
+    fig4, ax4 = plt.subplots(figsize=(9, 6))
+    ax4.scatter(df.index, df["Lugar_numeric"], color='purple', alpha=0.6, edgecolors='black')
+    ax4.set_title("Diagrama de Dispersión de Frecuencia de Lugares")
+    ax4.set_xlabel("Índice")
+    ax4.set_ylabel("Frecuencia de Lugares")
+    ax4.grid(True, linestyle="--", alpha=0.5)
     
     # Mostrar diagrama de dispersión
-    st.pyplot(fig3)
+    st.pyplot(fig4)
 
-
-     # Mostrar resultados en Streamlit
+    # Mostrar resultados en Streamlit
     st.title("Análisis de Preferencias de Lugares")
     st.write(f"**Lugar más frecuente:** {frecuencia_lugares.idxmax()}")
     st.write(f"**Total de registros en 'Lugar':** {df['Lugar'].count()}")
     
     # Diagrama de frecuencia (gráfico de línea)
-    fig4, ax = plt.subplots(figsize=(12, 6))
-    frecuencia_lugares.sort_index().plot(kind='line', marker='o', color='blue', linestyle='-', linewidth=2, markersize=6, ax=ax)
-    ax.set_title("Diagrama de Frecuencia de Lugares", fontsize=14, fontweight='bold')
-    ax.set_xlabel("Lugares", fontsize=12)
-    ax.set_ylabel("Frecuencia de Visitas", fontsize=12)
-    ax.grid(axis='y', linestyle='--', alpha=0.7)
+    fig5, ax5 = plt.subplots(figsize=(12, 6))
+    frecuencia_lugares.sort_index().plot(kind='line', marker='o', color='blue', linestyle='-', linewidth=2, markersize=6, ax=ax5)
+    ax5.set_title("Diagrama de Frecuencia de Lugares", fontsize=14, fontweight='bold')
+    ax5.set_xlabel("Lugares", fontsize=12)
+    ax5.set_ylabel("Frecuencia de Visitas", fontsize=12)
+    ax5.grid(axis='y', linestyle='--', alpha=0.7)
     
     # Mostrar en Streamlit
-    st.pyplot(fig4)
-
-    
+    st.pyplot(fig5)
 
 except FileNotFoundError:
     st.error(f"❌ Error: No se encontró el archivo en la ruta: {archivo_excel}")
